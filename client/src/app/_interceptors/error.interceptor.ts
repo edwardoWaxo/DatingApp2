@@ -20,6 +20,7 @@ export class ErrorInterceptor implements HttpInterceptor {
       catchError(error => {
         if (error) {
           switch (error.status) {
+
             case 400:
               if (error.error.errors) {
                 const modalStateErrors = [];
@@ -28,25 +29,28 @@ export class ErrorInterceptor implements HttpInterceptor {
                     modalStateErrors.push(error.error.errors[key]);
                   }
                 }
-                throw modalStateErrors.flat();
+                throw modalStateErrors;
+              } else if (typeof(error.error === 'object')) {
+                this.toastr.error(error.error.statusText, error.status);
               } else {
-                this.toastr.error(error.statusText === "OK" ? "Bad request" : error.statusText, error.status);
+                console.log(error.statusText);
+                console.log(error);
+                this.toastr.error(error.statusText == "OK" ? "Bad Request" : error.statusText, error.status);
               }
-              
               break;
 
-              case 401:
-                this.toastr.error(error.statusText === "OK" ? "Unauthorized" : error.statusText, error.status);
-                break;
+            case 401:
+              this.toastr.error(error.statusText === "OK" ? "Unauthorized" : error.statusText, error.status);
+              break;
 
-                case 404:
-                this.router.navigateByUrl('/not-found');
-                break;
+            case 404:
+              this.router.navigateByUrl('/not-found');
+              break;
 
-                case 500:
-                const navigationExtras: NavigationExtras = {state: {error: error.error}}
-                this.router.navigateByUrl('/server-error', navigationExtras);
-                break;
+            case 500:
+              const navigationExtras: NavigationExtras = {state: {error: error.error}};
+              this.router.navigateByUrl('/server-error', navigationExtras);
+              break;
           
             default:
               this.toastr.error('Something unexpected went wrong');
