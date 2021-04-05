@@ -29,13 +29,11 @@ export class ErrorInterceptor implements HttpInterceptor {
                     modalStateErrors.push(error.error.errors[key]);
                   }
                 }
-                throw modalStateErrors;
-              } else if (typeof(error.error === 'object')) {
-                this.toastr.error(error.error.statusText, error.status);
+                throw modalStateErrors.flat();
+              } else if (typeof(error.error) === 'object') {
+                this.toastr.error(error.statusText, error.status);
               } else {
-                console.log(error.statusText);
-                console.log(error);
-                this.toastr.error(error.statusText == "OK" ? "Bad Request" : error.statusText, error.status);
+                this.toastr.error(error.error, error.status);
               }
               break;
 
@@ -54,7 +52,6 @@ export class ErrorInterceptor implements HttpInterceptor {
           
             default:
               this.toastr.error('Something unexpected went wrong');
-              console.log(error);
               break;
           }
         }
