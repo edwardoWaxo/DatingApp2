@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace API.Extensions
 {
-    public static class ApplilcationServiceExtenions
+    public static class ApplicationServiceExtenions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
         {
