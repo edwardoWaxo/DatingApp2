@@ -13,7 +13,9 @@ import { User } from '../_models/user';
 export class PresenceService {
   hubUrl = environment.hubUrl;
   private hubConnection: HubConnection;
-  private onlineUsersSource = new BehaviorSubject<string[]>([]);
+  private stringArray: string[] = [" "];
+  private onlineUsersSource = new BehaviorSubject<string[]>(this.stringArray);
+  //private onlineUsersSource = new BehaviorSubject<string[]>([]);
   onlineUsers$ = this.onlineUsersSource.asObservable();
 
   constructor(private toastr: ToastrService, private router: Router) { }
